@@ -1,0 +1,397 @@
+<tool_usage_guide>
+  <overview>
+    Specific guidance for how the UX Designer mode should use available tools to accomplish
+    design system creation, component development, and UI optimization tasks effectively.
+  </overview>
+
+  <tool_priorities>
+    <priority level="1">
+      <tool>codebase_search</tool>
+      <when>Always use first to understand existing design patterns and components</when>
+      <why>Finds existing design implementations, component patterns, and styling approaches across the codebase</why>
+      <usage_patterns>
+        <pattern>Search for "component button" to find existing button implementations</pattern>
+        <pattern>Search for "tailwind config" to locate configuration files</pattern>
+        <pattern>Search for "design system colors" to find color usage patterns</pattern>
+        <pattern>Search for "accessibility ARIA" to find accessibility implementations</pattern>
+      </usage_patterns>
+    </priority>
+
+    <priority level="2">
+      <tool>read_file</tool>
+      <when>After identifying relevant files with codebase_search</when>
+      <why>Get complete context of existing implementations before making changes</why>
+      <focus_areas>
+        <area>tailwind.config.ts - Understanding current design token setup</area>
+        <area>globals.css - Examining global styles and custom CSS</area>
+        <area>component files - Analyzing existing component patterns</area>
+        <area>package.json - Understanding available dependencies</area>
+      </focus_areas>
+    </priority>
+
+    <priority level="3">
+      <tool>browser</tool>
+      <when>Testing visual designs and user interactions</when>
+      <why>Essential for validating responsive design, accessibility, and user experience</why>
+      <testing_workflow>
+        <step>Navigate to development server or deployed app</step>
+        <step>Test responsive behavior across different viewport sizes</step>
+        <step>Validate color contrast and visual hierarchy</step>
+        <step>Test keyboard navigation and focus management</step>
+        <step>Verify accessibility with screen reader simulation</step>
+      </testing_workflow>
+    </priority>
+  </tool_priorities>
+
+  <tool_specific_guidance>
+    <tool name="apply_diff">
+      <best_practices>
+        <practice>Always read the target file first to ensure exact content matching</practice>
+        <practice>Group related style changes in a single diff when possible</practice>
+        <practice>Include proper line numbers for accuracy</practice>
+        <practice>Test changes incrementally rather than making large style modifications</practice>
+      </best_practices>
+      
+      <common_use_cases>
+        <use_case name="updating_tailwind_config">
+          <description>Adding design tokens to Tailwind configuration</description>
+          <example><![CDATA[
+<apply_diff>
+<path>tailwind.config.ts</path>
+<diff>
+<<<<<<< SEARCH
+:start_line:15
+-------
+  theme: {
+    extend: {},
+  },
+=======
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          50: '#eff6ff',
+          500: '#3b82f6',
+          900: '#1e3a8a'
+        }
+      },
+      fontFamily: {
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif']
+      }
+    },
+  },
+>>>>>>> REPLACE
+</diff>
+</apply_diff>
+          ]]></example>
+        </use_case>
+
+        <use_case name="component_styling">
+          <description>Updating component styles with design system tokens</description>
+          <example><![CDATA[
+<apply_diff>
+<path>src/components/Button.tsx</path>
+<diff>
+<<<<<<< SEARCH
+:start_line:5
+-------
+  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+=======
+  className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+>>>>>>> REPLACE
+</diff>
+</apply_diff>
+          ]]></example>
+        </use_case>
+      </common_use_cases>
+
+      <validation_steps>
+        <step>Verify the search content exactly matches the file content</step>
+        <step>Ensure replacement follows design system conventions</step>
+        <step>Check that accessibility attributes are maintained or improved</step>
+        <step>Confirm responsive design patterns are preserved</step>
+      </validation_steps>
+    </tool>
+
+    <tool name="write_to_file">
+      <best_practices>
+        <practice>Use for creating new component files or complete rewrites</practice>
+        <practice>Always include complete file content with proper imports and exports</practice>
+        <practice>Follow established file naming and structure conventions</practice>
+        <practice>Include TypeScript types and proper component documentation</practice>
+      </best_practices>
+
+      <component_creation_template>
+        <template><![CDATA[
+// Always include proper file structure for new components:
+
+// 1. Imports (React, utilities, types)
+import React from 'react';
+import { cn } from '@/lib/utils';
+
+// 2. Type definitions
+interface ComponentProps {
+  // Define props with proper types
+}
+
+// 3. Component implementation with forwardRef for proper accessibility
+const Component = React.forwardRef<HTMLElement, ComponentProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <element
+        ref={ref}
+        className={cn("base-styles", className)}
+        {...props}
+      />
+    );
+  }
+);
+
+// 4. Display name for debugging
+Component.displayName = "Component";
+
+// 5. Export
+export { Component };
+        ]]></template>
+      </component_creation_template>
+
+      <file_organization>
+        <pattern>components/ui/ - Basic UI components</pattern>
+        <pattern>components/layout/ - Layout-specific components</pattern>
+        <pattern>components/forms/ - Form-related components</pattern>
+        <pattern>lib/utils.ts - Utility functions</pattern>
+        <pattern>styles/ - Global styles and custom CSS</pattern>
+      </file_organization>
+    </tool>
+
+    <tool name="browser_snapshot">
+      <best_practices>
+        <practice>Use to capture current page state for design review</practice>
+        <practice>Take snapshots at different breakpoints to verify responsive design</practice>
+        <practice>Capture both light and dark mode states when applicable</practice>
+        <practice>Document accessibility tree structure for complex components</practice>
+      </best_practices>
+
+      <design_validation_workflow>
+        <step>Take snapshot of current implementation</step>
+        <step>Analyze layout, spacing, and visual hierarchy</step>
+        <step>Check for accessibility landmarks and structure</step>
+        <step>Identify areas for improvement</step>
+        <step>Document design decisions and rationale</step>
+      </design_validation_workflow>
+    </tool>
+
+    <tool name="browser_click">
+      <best_practices>
+        <practice>Test all interactive elements for proper feedback</practice>
+        <practice>Verify hover states and transitions work correctly</practice>
+        <practice>Test both mouse and touch interactions</practice>
+        <practice>Ensure focus states are visible and logical</practice>
+      </best_practices>
+
+      <interaction_testing>
+        <test_category name="buttons_and_links">
+          <test>Click all button variants to test hover and active states</test>
+          <test>Verify proper cursor changes (pointer, default, etc.)</test>
+          <test>Test disabled state interactions</test>
+          <test>Validate loading state behaviors</test>
+        </test_category>
+
+        <test_category name="forms">
+          <test>Click form inputs to test focus states</test>
+          <test>Test tab navigation through form elements</test>
+          <test>Verify error state styling and messaging</test>
+          <test>Test form submission and validation</test>
+        </test_category>
+
+        <test_category name="navigation">
+          <test>Test mobile menu toggle functionality</test>
+          <test>Verify active state highlighting</test>
+          <test>Test dropdown menu interactions</test>
+          <test>Validate breadcrumb navigation</test>
+        </test_category>
+      </interaction_testing>
+    </tool>
+
+    <tool name="browser_resize">
+      <best_practices>
+        <practice>Test at all major breakpoints (320px, 768px, 1024px, 1440px)</practice>
+        <practice>Check for horizontal scroll at mobile sizes</practice>
+        <practice>Verify touch target sizes on mobile (minimum 44px)</practice>
+        <practice>Test both portrait and landscape orientations</practice>
+      </best_practices>
+
+      <responsive_testing_sequence>
+        <step>Start at mobile (320px width) and work up</step>
+        <step>Test at 375px (iPhone SE), 414px (iPhone Pro), 768px (tablet)</step>
+        <step>Test at 1024px (small desktop), 1440px (large desktop)</step>
+        <step>Verify layout doesn't break between breakpoints</step>
+        <step>Check that text remains readable at all sizes</step>
+        <step>Ensure interactive elements remain accessible</step>
+      </responsive_testing_sequence>
+    </tool>
+
+    <tool name="search_files">
+      <best_practices>
+        <practice>Use after codebase_search to find specific patterns or inconsistencies</practice>
+        <practice>Search for hardcoded colors, spacing values, or font sizes</practice>
+        <practice>Find inconsistent class usage across components</practice>
+        <practice>Locate accessibility issues (missing alt text, ARIA labels)</practice>
+      </best_practices>
+
+      <search_patterns>
+        <pattern name="color_inconsistencies">
+          <regex>bg-\w+-\d+|text-\w+-\d+</regex>
+          <purpose>Find hardcoded color classes that should use design tokens</purpose>
+        </pattern>
+
+        <pattern name="spacing_inconsistencies">
+          <regex>p-\[\d+px\]|m-\[\d+px\]</regex>
+          <purpose>Find arbitrary spacing values that should use standard scale</purpose>
+        </pattern>
+
+        <pattern name="accessibility_issues">
+          <regex>img(?![^>]*alt=)|button(?![^>]*aria-label)</regex>
+          <purpose>Find images without alt text or buttons without labels</purpose>
+        </pattern>
+
+        <pattern name="responsive_patterns">
+          <regex>sm:|md:|lg:|xl:|2xl:</regex>
+          <purpose>Analyze responsive design implementation across components</purpose>
+        </pattern>
+      </search_patterns>
+    </tool>
+
+    <tool name="ask_followup_question">
+      <best_practices>
+        <practice>Use when design decisions require user input or clarification</practice>
+        <practice>Provide 2-4 specific, actionable design options</practice>
+        <practice>Include visual or functional trade-offs in suggestions</practice>
+        <practice>Focus on user experience impact rather than technical details</practice>
+      </best_practices>
+
+      <design_decision_scenarios>
+        <scenario name="color_palette_selection">
+          <question>What type of color palette would work best for your application?</question>
+          <suggestions>
+            <suggest>Professional and trustworthy (blues and grays with high contrast)</suggest>
+            <suggest>Warm and approachable (oranges and greens with softer tones)</suggest>
+            <suggest>Modern and minimal (monochromatic with single accent color)</suggest>
+            <suggest>Bold and energetic (vibrant colors with strong contrasts)</suggest>
+          </suggestions>
+        </scenario>
+
+        <scenario name="component_complexity">
+          <question>How complex should the component variants be for your use case?</question>
+          <suggestions>
+            <suggest>Simple with 2-3 variants (size and color only)</suggest>
+            <suggest>Moderate with multiple states (loading, disabled, success, error)</suggest>
+            <suggest>Complex with full customization (icons, animations, themes)</suggest>
+            <suggest>Minimal single variant that can be easily extended later</suggest>
+          </suggestions>
+        </scenario>
+
+        <scenario name="responsive_strategy">
+          <question>What's your priority for responsive design on this component?</question>
+          <suggestions>
+            <suggest>Mobile-first with progressive enhancement for larger screens</suggest>
+            <suggest>Desktop-optimized with mobile adaptation</suggest>
+            <suggest>Consistent experience across all device sizes</suggest>
+            <suggest>Adaptive layout that changes significantly per breakpoint</suggest>
+          </suggestions>
+        </scenario>
+      </design_decision_scenarios>
+    </tool>
+  </tool_specific_guidance>
+
+  <workflow_tool_sequences>
+    <sequence name="new_component_creation">
+      <description>Complete workflow for creating a new component with design system integration</description>
+      <steps>
+        <step tool="codebase_search">Search for similar existing components</step>
+        <step tool="read_file">Examine existing component patterns and design tokens</step>
+        <step tool="write_to_file">Create new component following established patterns</step>
+        <step tool="browser_navigate">Navigate to development environment</step>
+        <step tool="browser_snapshot">Capture initial component state</step>
+        <step tool="browser_resize">Test responsive behavior</step>
+        <step tool="browser_click">Test interactions and states</step>
+        <step tool="apply_diff">Refine based on testing feedback</step>
+      </steps>
+    </sequence>
+
+    <sequence name="design_system_audit">
+      <description>Comprehensive audit of existing design system implementation</description>
+      <steps>
+        <step tool="codebase_search">Find all design-related files and components</step>
+        <step tool="read_file">Examine current Tailwind config and global styles</step>
+        <step tool="search_files">Find inconsistent color and spacing usage</step>
+        <step tool="browser_navigate">Navigate to application pages</step>
+        <step tool="browser_snapshot">Document current state of key pages</step>
+        <step tool="browser_resize">Test responsive behavior across pages</step>
+        <step tool="apply_diff">Implement design system improvements</step>
+        <step tool="browser_snapshot">Document improved state</step>
+      </steps>
+    </sequence>
+
+    <sequence name="accessibility_validation">
+      <description>Validate and improve accessibility of components and pages</description>
+      <steps>
+        <step tool="codebase_search">Find accessibility-related code (ARIA, semantic HTML)</step>
+        <step tool="search_files">Search for accessibility issues (missing alt text, labels)</step>
+        <step tool="browser_navigate">Navigate to components/pages to test</step>
+        <step tool="browser_snapshot">Capture accessibility tree structure</step>
+        <step tool="browser_click">Test keyboard navigation and focus management</step>
+        <step tool="apply_diff">Implement accessibility improvements</step>
+        <step tool="browser_snapshot">Verify accessibility improvements</step>
+      </steps>
+    </sequence>
+  </workflow_tool_sequences>
+
+  <error_handling>
+    <common_errors>
+      <error type="FileRestrictionError">
+        <cause>Attempting to edit files outside allowed patterns</cause>
+        <solution>Focus on component files, Tailwind config, and documentation</solution>
+        <allowed_patterns>
+          <pattern>src/.*\.(tsx?|jsx?|css)$ - React components and stylesheets</pattern>
+          <pattern>tailwind\.config\.(ts|js)$ - Tailwind configuration</pattern>
+          <pattern>postcss\.config\.(mjs|js)$ - PostCSS configuration</pattern>
+          <pattern>.*\.md$ - Documentation files</pattern>
+          <pattern>public/.*\.(svg|png|jpg|jpeg|webp|ico)$ - Design assets</pattern>
+        </allowed_patterns>
+      </error>
+
+      <error type="InvalidTailwindClass">
+        <cause>Using non-existent or arbitrary Tailwind classes</cause>
+        <solution>Verify classes exist in Tailwind documentation or add to config</solution>
+        <prevention>Always reference design tokens defined in Tailwind config</prevention>
+      </error>
+
+      <error type="AccessibilityViolation">
+        <cause>Missing accessibility attributes or improper semantic HTML</cause>
+        <solution>Add proper ARIA labels, semantic elements, and keyboard support</solution>
+        <validation>Use browser accessibility tools to verify implementation</validation>
+      </error>
+    </common_errors>
+
+    <debugging_strategies>
+      <strategy name="component_not_styling">
+        <steps>
+          <step>Check if Tailwind classes are properly purged/included</step>
+          <step>Verify component imports and file paths</step>
+          <step>Use browser dev tools to inspect applied styles</step>
+          <step>Check for CSS specificity conflicts</step>
+        </steps>
+      </strategy>
+
+      <strategy name="responsive_not_working">
+        <steps>
+          <step>Verify viewport meta tag is present in layout</step>
+          <step>Check breakpoint syntax (sm:, md:, lg:, etc.)</step>
+          <step>Test with browser dev tools responsive mode</step>
+          <step>Ensure mobile-first approach is followed</step>
+        </steps>
+      </strategy>
+    </debugging_strategies>
+  </error_handling>
+</tool_usage_guide>

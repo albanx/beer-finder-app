@@ -1,0 +1,806 @@
+<design_system_examples>
+  <overview>
+    Complete workflow examples demonstrating how to use the UX Designer mode to create
+    design systems, components, and improve user experience in Next.js applications.
+  </overview>
+
+  <complete_workflows>
+    <workflow name="creating_design_system_from_scratch">
+      <description>
+        Complete example of setting up a design system for a new Next.js project
+        with Tailwind CSS, including configuration, tokens, and base components.
+      </description>
+
+      <scenario>
+        <context>
+          Starting with a fresh Next.js project that has basic Tailwind setup.
+          Goal is to create a cohesive design system for a SaaS application.
+        </context>
+        <requirements>
+          <requirement>Professional, trustworthy appearance</requirement>
+          <requirement>Accessibility compliance (WCAG 2.1 AA)</requirement>
+          <requirement>Mobile-first responsive design</requirement>
+          <requirement>Consistent spacing and typography</requirement>
+        </requirements>
+      </scenario>
+
+      <step_by_step_example>
+        <step number="1">
+          <title>Analyze Current State</title>
+          <action>Use codebase_search to understand existing setup</action>
+          <example_query>tailwind config next.js setup</example_query>
+          <what_to_look_for>
+            <item>Current Tailwind configuration</item>
+            <item>Existing global styles</item>
+            <item>Any existing components</item>
+            <item>Font loading setup</item>
+          </what_to_look_for>
+        </step>
+
+        <step number="2">
+          <title>Configure Design Tokens</title>
+          <action>Update Tailwind configuration with design system tokens</action>
+          <implementation>
+            <file_path>tailwind.config.ts</file_path>
+            <complete_example><![CDATA[
+import type { Config } from 'tailwindcss'
+
+const config: Config = {
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        // Brand colors - professional blue palette
+        primary: {
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6', // Main brand color
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+          950: '#172554'
+        },
+        // Semantic colors
+        success: {
+          50: '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#22c55e',
+          600: '#16a34a',
+          700: '#15803d',
+          800: '#166534',
+          900: '#14532d',
+          950: '#052e16'
+        },
+        warning: {
+          50: '#fffbeb',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#f59e0b',
+          600: '#d97706',
+          700: '#b45309',
+          800: '#92400e',
+          900: '#78350f',
+          950: '#451a03'
+        },
+        error: {
+          50: '#fef2f2',
+          100: '#fee2e2',
+          200: '#fecaca',
+          300: '#fca5a5',
+          400: '#f87171',
+          500: '#ef4444',
+          600: '#dc2626',
+          700: '#b91c1c',
+          800: '#991b1b',
+          900: '#7f1d1d',
+          950: '#450a0a'
+        },
+        // Neutral grays
+        gray: {
+          50: '#f9fafb',
+          100: '#f3f4f6',
+          200: '#e5e7eb',
+          300: '#d1d5db',
+          400: '#9ca3af',
+          500: '#6b7280',
+          600: '#4b5563',
+          700: '#374151',
+          800: '#1f2937',
+          900: '#111827',
+          950: '#030712'
+        }
+      },
+      fontFamily: {
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        serif: ['ui-serif', 'Georgia', 'serif'],
+        mono: ['ui-monospace', 'SFMono-Regular', 'monospace']
+      },
+      fontSize: {
+        xs: ['0.75rem', { lineHeight: '1rem' }],
+        sm: ['0.875rem', { lineHeight: '1.25rem' }],
+        base: ['1rem', { lineHeight: '1.5rem' }],
+        lg: ['1.125rem', { lineHeight: '1.75rem' }],
+        xl: ['1.25rem', { lineHeight: '1.75rem' }],
+        '2xl': ['1.5rem', { lineHeight: '2rem' }],
+        '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
+        '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
+        '5xl': ['3rem', { lineHeight: '1' }],
+        '6xl': ['3.75rem', { lineHeight: '1' }]
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem'
+      },
+      boxShadow: {
+        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
+        'medium': '0 4px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+        'strong': '0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 2px 10px -2px rgba(0, 0, 0, 0.05)'
+      }
+    },
+  },
+  plugins: [],
+}
+
+export default config
+            ]]></complete_example>
+          </implementation>
+        </step>
+
+        <step number="3">
+          <title>Setup Global Styles and Typography</title>
+          <action>Create comprehensive global styles with proper font loading</action>
+          <implementation>
+            <file_path>src/app/globals.css</file_path>
+            <complete_example><![CDATA[
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Inter font import with optimal loading */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+@layer base {
+  /* CSS custom properties for dynamic theming */
+  :root {
+    --color-primary: 59 130 246; /* primary-500 */
+    --color-primary-foreground: 255 255 255;
+    --color-background: 255 255 255;
+    --color-foreground: 17 24 39; /* gray-900 */
+    --color-muted: 249 250 251; /* gray-50 */
+    --color-muted-foreground: 107 114 128; /* gray-500 */
+    --color-border: 229 231 235; /* gray-200 */
+    --color-input: 255 255 255;
+    --color-ring: 59 130 246; /* primary-500 */
+  }
+
+  /* Dark mode variables */
+  .dark {
+    --color-background: 3 7 18; /* gray-950 */
+    --color-foreground: 249 250 251; /* gray-50 */
+    --color-muted: 31 41 55; /* gray-800 */
+    --color-muted-foreground: 156 163 175; /* gray-400 */
+    --color-border: 75 85 99; /* gray-600 */
+    --color-input: 31 41 55; /* gray-800 */
+  }
+
+  /* Base HTML elements */
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Typography hierarchy */
+  h1 {
+    @apply text-4xl font-bold tracking-tight lg:text-5xl;
+  }
+
+  h2 {
+    @apply text-3xl font-semibold tracking-tight;
+  }
+
+  h3 {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+
+  h4 {
+    @apply text-xl font-semibold tracking-tight;
+  }
+
+  h5 {
+    @apply text-lg font-semibold tracking-tight;
+  }
+
+  h6 {
+    @apply text-base font-semibold tracking-tight;
+  }
+
+  p {
+    @apply leading-7;
+  }
+
+  /* Focus styles for accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2;
+  }
+
+  /* Custom scrollbar styles */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+}
+
+@layer components {
+  /* Component layer utilities */
+  .btn {
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary text-primary-foreground shadow hover:bg-primary/90;
+  }
+
+  .btn-secondary {
+    @apply btn bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80;
+  }
+
+  .input {
+    @apply flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50;
+  }
+}
+
+@layer utilities {
+  /* Custom utility classes */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Container queries support */
+  .container-queries {
+    container-type: inline-size;
+  }
+}
+            ]]></complete_example>
+          </implementation>
+        </step>
+
+        <step number="4">
+          <title>Create Utility Functions</title>
+          <action>Setup utility functions for class merging and component variants</action>
+          <implementation>
+            <file_path>src/lib/utils.ts</file_path>
+            <complete_example><![CDATA[
+import { type ClassValue, clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+/**
+ * Utility function to merge Tailwind classes safely
+ * Combines clsx for conditional classes and tailwind-merge for deduplication
+ */
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+/**
+ * Utility to create consistent spacing patterns
+ */
+export const spacing = {
+  xs: "p-2",
+  sm: "p-4",
+  md: "p-6",
+  lg: "p-8",
+  xl: "p-12"
+} as const
+
+/**
+ * Utility for consistent border radius
+ */
+export const radius = {
+  none: "rounded-none",
+  sm: "rounded-sm",
+  md: "rounded-md",
+  lg: "rounded-lg",
+  xl: "rounded-xl",
+  full: "rounded-full"
+} as const
+
+/**
+ * Color palette helpers
+ */
+export const colors = {
+  primary: "bg-primary-500 text-white",
+  secondary: "bg-gray-100 text-gray-900",
+  success: "bg-success-500 text-white",
+  warning: "bg-warning-500 text-white",
+  error: "bg-error-500 text-white"
+} as const
+
+/**
+ * Typography scale helpers
+ */
+export const typography = {
+  display: "text-5xl font-bold tracking-tight",
+  h1: "text-4xl font-bold tracking-tight",
+  h2: "text-3xl font-semibold tracking-tight",
+  h3: "text-2xl font-semibold tracking-tight",
+  h4: "text-xl font-semibold tracking-tight",
+  body: "text-base leading-7",
+  small: "text-sm text-muted-foreground",
+  caption: "text-xs text-muted-foreground"
+} as const
+            ]]></complete_example>
+          </implementation>
+        </step>
+
+        <step number="5">
+          <title>Create Base Button Component</title>
+          <action>Implement accessible button component with multiple variants</action>
+          <implementation>
+            <file_path>src/components/ui/Button.tsx</file_path>
+            <complete_example><![CDATA[
+import React from 'react'
+import { Slot } from '@radix-ui/react-slot'
+import { cva, type VariantProps } from 'class-variance-authority'
+import { cn } from '@/lib/utils'
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary-500 text-white shadow hover:bg-primary-600",
+        destructive: "bg-error-500 text-white shadow-sm hover:bg-error-600",
+        outline: "border border-gray-200 bg-white shadow-sm hover:bg-gray-50 hover:text-gray-900",
+        secondary: "bg-gray-100 text-gray-900 shadow-sm hover:bg-gray-200",
+        ghost: "hover:bg-gray-100 hover:text-gray-900",
+        link: "text-primary-500 underline-offset-4 hover:underline"
+      },
+      size: {
+        sm: "h-8 rounded-md px-3 text-xs",
+        default: "h-9 px-4 py-2",
+        lg: "h-10 rounded-md px-8",
+        icon: "h-9 w-9"
+      }
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default"
+    }
+  }
+)
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button"
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Button.displayName = "Button"
+
+export { Button, buttonVariants }
+            ]]></complete_example>
+          </implementation>
+        </step>
+
+        <step number="6">
+          <title>Test and Validate Design System</title>
+          <action>Use browser tools to test the implementation</action>
+          <testing_steps>
+            <test>Navigate to development server</test>
+            <test>Create a test page with all button variants</test>
+            <test>Test responsive behavior at different screen sizes</test>
+            <test>Validate accessibility with keyboard navigation</test>
+            <test>Check color contrast ratios</test>
+          </testing_steps>
+        </step>
+      </step_by_step_example>
+
+      <expected_outcomes>
+        <outcome>Consistent design tokens available throughout the application</outcome>
+        <outcome>Accessible button component with multiple variants</outcome>
+        <outcome>Proper font loading and typography hierarchy</outcome>
+        <outcome>Mobile-first responsive design foundation</outcome>
+        <outcome>Utility functions for consistent styling</outcome>
+      </expected_outcomes>
+    </workflow>
+
+    <workflow name="component_accessibility_improvement">
+      <description>
+        Example of improving accessibility for an existing form component
+        by adding proper ARIA attributes, keyboard navigation, and focus management.
+      </description>
+
+      <scenario>
+        <context>
+          Existing form component lacks proper accessibility features.
+          Users with screen readers and keyboard navigation struggle to use it.
+        </context>
+        <current_issues>
+          <issue>Form inputs lack proper labels</issue>
+          <issue>Error messages not announced to screen readers</issue>
+          <issue>No keyboard navigation support</issue>
+          <issue>Poor focus management</issue>
+        </current_issues>
+      </scenario>
+
+      <accessibility_improvements>
+        <improvement type="form_labels">
+          <before><![CDATA[
+<input
+  type="email"
+  placeholder="Enter your email"
+  className="border rounded px-3 py-2"
+/>
+          ]]></before>
+          <after><![CDATA[
+<div className="space-y-1">
+  <label 
+    htmlFor="email-input"
+    className="block text-sm font-medium text-gray-700"
+  >
+    Email Address
+  </label>
+  <input
+    id="email-input"
+    type="email"
+    placeholder="Enter your email"
+    aria-describedby="email-helper email-error"
+    aria-invalid={hasError ? 'true' : 'false'}
+    className="flex h-9 w-full rounded-md border border-gray-200 bg-white px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-500"
+  />
+  <p id="email-helper" className="text-sm text-gray-500">
+    We'll never share your email with anyone else.
+  </p>
+  {hasError && (
+    <p id="email-error" className="text-sm text-error-500" role="alert">
+      Please enter a valid email address.
+    </p>
+  )}
+</div>
+          ]]></after>
+          <accessibility_features>
+            <feature>Proper label association with htmlFor and id</feature>
+            <feature>Helper text linked via aria-describedby</feature>
+            <feature>Error state indicated with aria-invalid</feature>
+            <feature>Error messages announced with role="alert"</feature>
+          </accessibility_features>
+        </improvement>
+
+        <improvement type="keyboard_navigation">
+          <description>Adding proper keyboard support for complex components</description>
+          <example><![CDATA[
+const DropdownMenu = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [focusedIndex, setFocusedIndex] = useState(-1)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    switch (event.key) {
+      case 'Escape':
+        setIsOpen(false)
+        break
+      case 'ArrowDown':
+        event.preventDefault()
+        setFocusedIndex(prev => 
+          prev < menuItems.length - 1 ? prev + 1 : 0
+        )
+        break
+      case 'ArrowUp':
+        event.preventDefault()
+        setFocusedIndex(prev => 
+          prev > 0 ? prev - 1 : menuItems.length - 1
+        )
+        break
+      case 'Enter':
+      case ' ':
+        event.preventDefault()
+        if (focusedIndex >= 0) {
+          handleMenuItemClick(menuItems[focusedIndex])
+        }
+        break
+    }
+  }
+
+  return (
+    <div className="relative">
+      <button
+        aria-expanded={isOpen}
+        aria-haspopup="menu"
+        aria-controls="dropdown-menu"
+        onClick={() => setIsOpen(!isOpen)}
+        className="btn btn-primary"
+      >
+        Menu
+      </button>
+      
+      {isOpen && (
+        <div
+          ref={menuRef}
+          id="dropdown-menu"
+          role="menu"
+          onKeyDown={handleKeyDown}
+          className="absolute top-full left-0 mt-1 bg-white border rounded-md shadow-lg"
+        >
+          {menuItems.map((item, index) => (
+            <button
+              key={item.id}
+              role="menuitem"
+              tabIndex={index === focusedIndex ? 0 : -1}
+              className={cn(
+                "block w-full text-left px-4 py-2 hover:bg-gray-50",
+                index === focusedIndex && "bg-gray-50"
+              )}
+              onClick={() => handleMenuItemClick(item)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+          ]]></example>
+        </improvement>
+      </accessibility_improvements>
+    </workflow>
+
+    <workflow name="responsive_layout_optimization">
+      <description>
+        Example of optimizing a card grid layout for better responsive behavior
+        and improved mobile experience.
+      </description>
+
+      <scenario>
+        <context>
+          Product grid layout works on desktop but breaks on mobile devices.
+          Cards are too small on mobile and spacing is inconsistent.
+        </context>
+        <problems>
+          <problem>Fixed grid columns don't adapt to content</problem>
+          <problem>Poor touch target sizes on mobile</problem>
+          <problem>Inconsistent spacing across breakpoints</problem>
+        </problems>
+      </scenario>
+
+      <responsive_optimization>
+        <before><![CDATA[
+<div className="grid grid-cols-4 gap-4">
+  {products.map(product => (
+    <div key={product.id} className="bg-white border rounded p-4">
+      <img src={product.image} alt={product.name} />
+      <h3>{product.name}</h3>
+      <p>${product.price}</p>
+      <button className="bg-blue-500 text-white px-2 py-1 rounded">
+        Add to Cart
+      </button>
+    </div>
+  ))}
+</div>
+        ]]></before>
+
+        <after><![CDATA[
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+  {products.map(product => (
+    <div 
+      key={product.id} 
+      className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+    >
+      <div className="aspect-square w-full overflow-hidden rounded-t-lg">
+        <img 
+          src={product.image} 
+          alt={product.name}
+          className="h-full w-full object-cover object-center group-hover:opacity-75"
+        />
+      </div>
+      
+      <div className="p-4 sm:p-6">
+        <h3 className="text-sm font-medium text-gray-900 sm:text-base">
+          {product.name}
+        </h3>
+        <p className="mt-1 text-lg font-semibold text-gray-900">
+          ${product.price}
+        </p>
+        
+        <button className="mt-4 w-full bg-primary-500 text-white px-4 py-2 rounded-md font-medium hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors">
+          Add to Cart
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+        ]]></after>
+
+        <improvements>
+          <improvement>Mobile-first responsive grid (1 → 2 → 3 → 4 columns)</improvement>
+          <improvement>Consistent aspect ratio for images</improvement>
+          <improvement>Adequate touch targets (minimum 44px height)</improvement>
+          <improvement>Responsive padding and text sizes</improvement>
+          <improvement>Proper hover and focus states</improvement>
+          <improvement>Accessible button with full width on mobile</improvement>
+        </improvements>
+
+        <breakpoint_behavior>
+          <breakpoint name="mobile (below 640px)">
+            <behavior>Single column layout with full-width cards</behavior>
+            <behavior>Larger touch targets and padding</behavior>
+            <behavior>Full-width buttons for easier interaction</behavior>
+          </breakpoint>
+          <breakpoint name="tablet (640px - 1024px)">
+            <behavior>Two column layout with more breathing room</behavior>
+            <behavior>Increased gap between cards</behavior>
+          </breakpoint>
+          <breakpoint name="desktop (1024px+)">
+            <behavior>Three to four column layout based on screen size</behavior>
+            <behavior>Hover effects for better desktop interaction</behavior>
+          </breakpoint>
+        </breakpoint_behavior>
+      </responsive_optimization>
+    </workflow>
+  </complete_workflows>
+
+  <common_scenarios>
+    <scenario name="color_palette_migration">
+      <description>Migrating from hardcoded colors to design system tokens</description>
+      <search_pattern>bg-(blue|red|green|yellow|purple|pink|indigo)-\d+</search_pattern>
+      <replacement_strategy>
+        <step>Search for hardcoded color usage across components</step>
+        <step>Map existing colors to semantic design tokens</step>
+        <step>Replace with consistent design system colors</step>
+        <step>Test visual consistency across all components</step>
+      </replacement_strategy>
+    </scenario>
+
+    <scenario name="spacing_consistency">
+      <description>Standardizing spacing patterns across the application</description>
+      <search_pattern>p-\[\d+px\]|m-\[\d+px\]|gap-\[\d+px\]</search_pattern>
+      <replacement_strategy>
+        <step>Find arbitrary spacing values</step>
+        <step>Map to Tailwind's standard spacing scale</step>
+        <step>Ensure consistent spacing hierarchy</step>
+        <step>Validate visual rhythm across pages</step>
+      </replacement_strategy>
+    </scenario>
+
+    <scenario name="accessibility_audit">
+      <description>Comprehensive accessibility review and improvement</description>
+      <audit_checklist>
+        <check>Color contrast ratios meet WCAG standards</check>
+        <check>All images have descriptive alt text</check>
+        <check>Form inputs have proper labels</check>
+        <check>Interactive elements are keyboard accessible</check>
+        <check>Focus indicators are visible and consistent</check>
+        <check>Semantic HTML is used appropriately</check>
+        <check>ARIA attributes are used correctly</check>
+      </audit_checklist>
+    </scenario>
+  </common_scenarios>
+
+  <testing_examples>
+    <test_case name="button_component_testing">
+      <description>Comprehensive testing approach for button component</description>
+      <visual_tests>
+        <test>All variants render with correct styles</test>
+        <test>Hover states work properly</test>
+        <test>Disabled state is visually distinct</test>
+        <test>Loading state shows appropriate indicator</test>
+      </visual_tests>
+      <interaction_tests>
+        <test>Click events fire correctly</test>
+        <test>Keyboard activation works (Enter/Space)</test>
+        <test>Focus management is proper</test>
+        <test>Screen reader announces button purpose</test>
+      </interaction_tests>
+      <responsive_tests>
+        <test>Touch targets are adequate on mobile (44px minimum)</test>
+        <test>Text remains readable at all sizes</test>
+        <test>Buttons stack properly on narrow screens</test>
+      </responsive_tests>
+    </test_case>
+
+    <test_case name="layout_component_testing">
+      <description>Testing responsive layout components</description>
+      <breakpoint_tests>
+        <test>Layout doesn't break between breakpoints</test>
+        <test>Content remains accessible at all sizes</test>
+        <test>Navigation works on mobile and desktop</test>
+        <test>Images scale appropriately</test>
+      </breakpoint_tests>
+      <performance_tests>
+        <test>Layout shift is minimal during load</test>
+        <test>CSS bundle size is optimized</test>
+        <test>Fonts load without blocking render</test>
+      </performance_tests>
+    </test_case>
+  </testing_examples>
+
+  <troubleshooting_guide>
+    <issue name="styles_not_applying">
+      <symptoms>
+        <symptom>Tailwind classes don't seem to take effect</symptom>
+        <symptom>Custom components don't show expected styling</symptom>
+      </symptoms>
+      <debugging_steps>
+        <step>Check Tailwind config content paths include all template files</step>
+        <step>Verify classes are not being purged incorrectly</step>
+        <step>Use browser dev tools to inspect actual applied styles</step>
+        <step>Check for CSS specificity conflicts</step>
+        <step>Ensure Tailwind directives are imported in globals.css</step>
+      </debugging_steps>
+    </issue>
+
+    <issue name="responsive_not_working">
+      <symptoms>
+        <symptom>Responsive classes don't activate at expected breakpoints</symptom>
+        <symptom>Mobile layout looks wrong</symptom>
+      </symptoms>
+      <debugging_steps>
+        <step>Verify viewport meta tag is present in layout</step>
+        <step>Check breakpoint syntax (sm:, md:, lg:, etc.)</step>
+        <step>Test with browser dev tools responsive mode</step>
+        <step>Ensure mobile-first approach is followed</step>
+        <step>Check for conflicting CSS that overrides Tailwind</step>
+      </debugging_steps>
+    </issue>
+
+    <issue name="accessibility_failures">
+      <symptoms>
+        <symptom>Screen reader announces content incorrectly</symptom>
+        <symptom>Keyboard navigation doesn't work</symptom>
+        <symptom>Color contrast fails accessibility tests</symptom>
+      </symptoms>
+      <debugging_steps>
+        <step>Use browser accessibility dev tools to audit</step>
+        <step>Test with actual screen reader software</step>
+        <step>Verify proper semantic HTML usage</step>
+        <step>Check ARIA attributes are correct</step>
+        <step>Test keyboard navigation flow</step>
+        <step>Validate color contrast ratios</step>
+      </debugging_steps>
+    </issue>
+  </troubleshooting_guide>
+</design_system_examples>

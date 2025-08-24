@@ -1,0 +1,160 @@
+<ux_design_workflow>
+  <mode_overview>
+    This mode specializes in creating cohesive design systems for Next.js applications using Tailwind CSS.
+    Focus areas include color schemes, typography hierarchies, spacing consistency, and reusable component patterns
+    that ensure accessible, responsive, and visually appealing user interfaces.
+  </mode_overview>
+
+  <initialization_steps>
+    <step number="1">
+      <action>Analyze current design state</action>
+      <details>
+        Examine the existing codebase to understand:
+        - Current Tailwind configuration and custom styles
+        - Existing component patterns and inconsistencies
+        - Color usage across the application
+        - Typography implementation
+        - Spacing patterns and layout approaches
+      </details>
+      <tools>
+        <tool>codebase_search - Find design-related code and components</tool>
+        <tool>read_file - Examine Tailwind config, global styles, and key components</tool>
+        <tool>search_files - Identify inconsistent styling patterns</tool>
+      </tools>
+    </step>
+    
+    <step number="2">
+      <action>Understand design requirements</action>
+      <details>
+        Parse user requirements to identify:
+        - Target audience and accessibility needs
+        - Brand guidelines or design preferences
+        - Device/screen size priorities
+        - Performance constraints
+        - Specific design problems to solve
+      </details>
+    </step>
+
+    <step number="3">
+      <action>Plan design system approach</action>
+      <details>
+        Create a systematic approach for:
+        - Color palette with accessibility considerations
+        - Typography scale and hierarchy
+        - Spacing system (margins, padding, gaps)
+        - Component design patterns
+        - Responsive breakpoint strategy
+      </details>
+    </step>
+  </initialization_steps>
+
+  <main_workflow>
+    <phase name="design_system_foundation">
+      <description>Establish core design tokens and configuration</description>
+      <steps>
+        <step>Configure Tailwind with custom design tokens</step>
+        <step>Define color palette with accessibility compliance</step>
+        <step>Establish typography scale and font loading</step>
+        <step>Create consistent spacing system</step>
+        <step>Set up responsive breakpoints</step>
+      </steps>
+      <deliverables>
+        <deliverable>Updated tailwind.config.ts with custom theme</deliverable>
+        <deliverable>Design token documentation</deliverable>
+        <deliverable>Global CSS with typography and base styles</deliverable>
+      </deliverables>
+    </phase>
+
+    <phase name="component_design">
+      <description>Create reusable UI components following design system</description>
+      <steps>
+        <step>Design component API and props structure</step>
+        <step>Implement components with Tailwind utilities</step>
+        <step>Ensure accessibility compliance (ARIA, keyboard navigation)</step>
+        <step>Add responsive behavior and mobile-first approach</step>
+        <step>Create component variants and states</step>
+      </steps>
+      <deliverables>
+        <deliverable>Reusable component library</deliverable>
+        <deliverable>Component documentation with examples</deliverable>
+        <deliverable>Accessibility testing notes</deliverable>
+      </deliverables>
+    </phase>
+
+    <phase name="consistency_optimization">
+      <description>Ensure design consistency across the application</description>
+      <steps>
+        <step>Audit existing components for design token usage</step>
+        <step>Refactor inconsistent styling to use design system</step>
+        <step>Optimize Tailwind purging for performance</step>
+        <step>Create style guides and usage documentation</step>
+        <step>Implement design system validation patterns</step>
+      </steps>
+      <deliverables>
+        <deliverable>Consistent styling across all components</deliverable>
+        <deliverable>Performance-optimized CSS build</deliverable>
+        <deliverable>Design system style guide</deliverable>
+      </deliverables>
+    </phase>
+
+    <phase name="testing_and_validation">
+      <description>Validate design implementation and accessibility</description>
+      <steps>
+        <step>Test responsive behavior across device sizes</step>
+        <step>Validate accessibility with automated and manual testing</step>
+        <step>Check color contrast ratios and visual hierarchy</step>
+        <step>Verify performance impact of styling choices</step>
+        <step>Test component usability and interaction patterns</step>
+      </steps>
+      <deliverables>
+        <deliverable>Accessibility compliance report</deliverable>
+        <deliverable>Cross-device testing results</deliverable>
+        <deliverable>Performance metrics for styling</deliverable>
+      </deliverables>
+    </phase>
+  </main_workflow>
+
+  <completion_criteria>
+    <criterion>Design system is fully implemented in Tailwind configuration</criterion>
+    <criterion>All components follow consistent design patterns</criterion>
+    <criterion>Accessibility standards (WCAG 2.1 AA) are met</criterion>
+    <criterion>Responsive design works across all target devices</criterion>
+    <criterion>Performance impact is minimal and optimized</criterion>
+    <criterion>Design system is well-documented for future use</criterion>
+  </completion_criteria>
+
+  <common_workflows>
+    <workflow name="new_design_system">
+      <trigger>Starting from scratch or major redesign</trigger>
+      <steps>
+        <step>Establish design tokens and Tailwind config</step>
+        <step>Create foundational components (buttons, inputs, cards)</step>
+        <step>Build layout components (grids, containers, sections)</step>
+        <step>Implement navigation and interactive elements</step>
+        <step>Add specialized components as needed</step>
+      </steps>
+    </workflow>
+
+    <workflow name="component_creation">
+      <trigger>Need for new reusable component</trigger>
+      <steps>
+        <step>Analyze similar existing components</step>
+        <step>Design component API and variants</step>
+        <step>Implement with design system tokens</step>
+        <step>Add accessibility features</step>
+        <step>Test and document usage</step>
+      </steps>
+    </workflow>
+
+    <workflow name="design_optimization">
+      <trigger>Improving existing design or fixing inconsistencies</trigger>
+      <steps>
+        <step>Audit current design patterns</step>
+        <step>Identify inconsistencies and pain points</step>
+        <step>Refactor using design system approach</step>
+        <step>Validate improvements</step>
+        <step>Update documentation</step>
+      </steps>
+    </workflow>
+  </common_workflows>
+</ux_design_workflow>
