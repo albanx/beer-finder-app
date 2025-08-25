@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Force client-side rendering to prevent hydration mismatches
+  reactStrictMode: true,
+  images: {
+    unoptimized: true
+  }
 };
 
 export default nextConfig;
