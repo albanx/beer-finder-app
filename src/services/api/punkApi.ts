@@ -140,11 +140,13 @@ class PunkApiClient {
       );
     }
   }
-
+  private padWithZeros(num: number, length = 3) {
+    return num.toString().padStart(length, '0');
+  }
   private transformPunkBeerResponse(punkBeer: PunkBeerResponse): PunkBeer {
     // Derive a beer style from the characteristics
     const style = this.deriveBeerStyle(punkBeer);
-
+    const imageId = this.padWithZeros(punkBeer.id);
     return {
       id: punkBeer.id.toString(),
       name: punkBeer.name,
@@ -153,7 +155,7 @@ class PunkApiClient {
       abv: punkBeer.abv,
       ibu: punkBeer.ibu,
       ebc: punkBeer.ebc,
-      image_url: punkBeer.image ? `https://images.punkapi.com/v2/${punkBeer.id}` : '',
+      image_url: punkBeer.image ? `https://raw.githubusercontent.com/alxiw/punkapi/refs/heads/master/img/${imageId}.png` : '',
       first_brewed: punkBeer.first_brewed,
       food_pairing: punkBeer.food_pairing,
       brewers_tips: punkBeer.brewers_tips,
@@ -225,13 +227,13 @@ class PunkApiClient {
     }
 
     try {
-      const response = await this.request<PunkBeerResponse[]>('/beers/random');
+      const response = await this.request<PunkBeerResponse>('/beers/random');
       
-      if (!response || response.length === 0) {
+      if (!response ) {
         throw new PunkApiError('No beer data received from Punk API');
       }
 
-      const beer = this.transformPunkBeerResponse(response[0]);
+      const beer = this.transformPunkBeerResponse(response);
       this.setCachedData(cacheKey, beer);
       
       return beer;
