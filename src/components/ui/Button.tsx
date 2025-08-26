@@ -4,7 +4,7 @@ import { forwardRef } from 'react';
 import { cn } from '@/utils/cn';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'accent' | 'beer';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   icon?: React.ReactNode;
@@ -26,11 +26,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const baseStyles = 'btn-touch font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus-visible';
     
     const variants = {
-      primary: 'bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700 focus:ring-primary-500',
-      secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 active:bg-gray-300 focus:ring-gray-500',
-      outline: 'border border-border bg-surface text-foreground hover:bg-gray-50 active:bg-gray-100 focus:ring-primary-500',
-      ghost: 'bg-transparent text-foreground hover:bg-gray-100 active:bg-gray-200 focus:ring-primary-500',
-      danger: 'bg-error text-white hover:bg-red-600 active:bg-red-700 focus:ring-red-500',
+      primary: 'bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800 focus:ring-primary-500 shadow-sm hover:shadow-md transition-all duration-200',
+      secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 active:bg-gray-400 focus:ring-primary-500 shadow-sm hover:shadow-md transition-all duration-200',
+      outline: 'border-2 border-primary-600 bg-white text-primary-600 hover:bg-primary-50 active:bg-primary-100 focus:ring-primary-500 shadow-sm hover:shadow-md transition-all duration-200',
+      ghost: 'bg-transparent text-primary-600 hover:bg-primary-50 active:bg-primary-100 focus:ring-primary-500 transition-all duration-200',
+      danger: 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800 focus:ring-red-500 shadow-sm hover:shadow-md transition-all duration-200',
+      accent: 'bg-orange-600 text-white hover:bg-orange-700 active:bg-orange-800 focus:ring-orange-500 shadow-sm hover:shadow-md transition-all duration-200',
+      beer: 'bg-gradient-to-r from-orange-600 to-orange-700 text-white hover:from-orange-700 hover:to-orange-800 active:from-orange-800 active:to-orange-900 focus:ring-orange-500 shadow-md hover:shadow-lg transition-all duration-200 font-medium',
     };
 
     const sizes = {

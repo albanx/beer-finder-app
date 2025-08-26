@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { BreweryCard, BreweryCardSkeleton } from './BreweryCard';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/utils/cn';
-import { BreweryWithRandomBeer } from '@/types/brewery';
+import { Brewery } from '@/types/brewery';
 
 interface BreweryGridProps {
-  breweries: BreweryWithRandomBeer[];
+  breweries: Brewery[];
   loading?: boolean;
   error?: string | null;
   onLoadMore?: () => void;
@@ -16,7 +16,7 @@ interface BreweryGridProps {
   variant?: 'grid' | 'list';
   onFavoriteToggle?: (breweryId: string) => void;
   onViewDetails?: (breweryId: string) => void;
-  onGetDirections?: (brewery: BreweryWithRandomBeer) => void;
+  onGetDirections?: (brewery: Brewery) => void;
   favoriteBreweries?: string[];
   className?: string;
 }
@@ -56,7 +56,7 @@ export function BreweryGrid({
 }: BreweryGridProps) {
   const [currentVariant, setCurrentVariant] = useState<'grid' | 'list'>(variant);
 
-  const handleGetDirections = (brewery: BreweryWithRandomBeer) => {
+  const handleGetDirections = (brewery: Brewery) => {
     // Default implementation - open Google Maps
     if (onGetDirections) {
       onGetDirections(brewery);

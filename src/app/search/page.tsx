@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { SearchWithLocation } from '@/components/search/SearchBar';
 import { SimpleFilterPanel } from '@/components/filters/SimpleFilterPanel';
@@ -17,7 +17,7 @@ const FilterIcon = () => (
   </svg>
 );
 
-export default function SearchPage() {
+function SearchPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -205,30 +205,41 @@ export default function SearchPage() {
   const hasActiveSearch = searchQuery || locationFilter || filters.type || filters.city || filters.state;
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen beer-themed-bg beer-texture">
       {/* Header */}
-      <div className="bg-white border-b border-border sticky top-0 z-40">
-        <div className="container-page py-4">
-          <div className="flex flex-col space-y-4">
+      <div className="beer-page-header border-b border-primary-200 sticky top-0 z-40 backdrop-blur-sm">
+        <div className="container-page py-6">
+          <div className="flex flex-col space-y-6">
+            <div className="text-center">
+              <h1 className="text-3xl font-bold text-primary-800 flex items-center justify-center gap-3 mb-2">
+                🍺 Brewery Search
+              </h1>
+              <p className="text-primary-600">Discover amazing craft breweries and beer experiences</p>
+            </div>
+            
             {/* Search Bar */}
-            <SearchWithLocation
-              searchValue={searchQuery}
-              locationValue={locationFilter}
-              onSearchChange={setSearchQuery}
-              onLocationChange={setLocationFilter}
-              onSearch={handleSearch}
-              loading={loading}
-            />
+            <div className="max-w-2xl mx-auto w-full">
+              <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-primary-200">
+                <SearchWithLocation
+                  searchValue={searchQuery}
+                  locationValue={locationFilter}
+                  onSearchChange={setSearchQuery}
+                  onLocationChange={setLocationFilter}
+                  onSearch={handleSearch}
+                  loading={loading}
+                />
+              </div>
+            </div>
 
             {/* Mobile Filter Button */}
             <div className="lg:hidden">
               <Button
                 onClick={() => setIsFilterPanelOpen(true)}
-                variant="outline"
+                variant="beer"
                 icon={<FilterIcon />}
                 className="w-full justify-center"
               >
-                Filters & Sort
+                🔧 Filters & Sort
               </Button>
             </div>
           </div>
@@ -236,18 +247,20 @@ export default function SearchPage() {
       </div>
 
       {/* Main Content */}
-      <div className="container-page py-6">
+      <div className="container-page py-8">
         <div className="flex gap-8">
           {/* Desktop Filter Sidebar */}
           <div className="hidden lg:block w-80 flex-shrink-0">
-            <div className="sticky top-24">
-              <SimpleFilterPanel
-                filters={filters}
-                onFiltersChange={handleFiltersChange}
-                onClose={() => {}} // Not used in desktop mode
-                isOpen={true} // Always open in desktop mode
-                breweryCount={breweries.length}
-              />
+            <div className="sticky top-32">
+              <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-primary-200 overflow-hidden">
+                <SimpleFilterPanel
+                  filters={filters}
+                  onFiltersChange={handleFiltersChange}
+                  onClose={() => {}} // Not used in desktop mode
+                  isOpen={true} // Always open in desktop mode
+                  breweryCount={breweries.length}
+                />
+              </div>
             </div>
           </div>
 
@@ -288,25 +301,25 @@ export default function SearchPage() {
 
             {/* Welcome State */}
             {!hasActiveSearch && (
-              <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-                <div className="bg-primary-50 rounded-full p-4 mb-6">
-                  <svg className="h-12 w-12 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
+                <div className="bg-gradient-to-br from-accent-100 to-accent-200 rounded-full p-6 mb-8 shadow-lg">
+                  <svg className="h-16 w-16 text-accent-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </div>
-                <h2 className="text-2xl font-bold text-foreground mb-4">
-                  Find Your Perfect Brewery
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                  🍺 Find Your Perfect Brewery
                 </h2>
-                <p className="text-muted max-w-md mb-8">
-                  Search by name, location, or browse by brewery type to discover amazing local breweries near you.
+                <p className="text-gray-600 max-w-lg mb-12 text-lg">
+                  Search by name, location, or browse by brewery type to discover amazing local breweries and craft beer experiences near you.
                 </p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-2xl">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-4xl">
                   {[
-                    { type: 'micro' as BreweryType, label: 'Microbreweries' },
-                    { type: 'brewpub' as BreweryType, label: 'Brewpubs' },
-                    { type: 'large' as BreweryType, label: 'Large Breweries' },
-                    { type: 'regional' as BreweryType, label: 'Regional' },
-                  ].map(({ type, label }) => (
+                    { type: 'micro' as BreweryType, label: 'Microbreweries', emoji: '🏭' },
+                    { type: 'brewpub' as BreweryType, label: 'Brewpubs', emoji: '🍽️' },
+                    { type: 'large' as BreweryType, label: 'Large Breweries', emoji: '🏢' },
+                    { type: 'regional' as BreweryType, label: 'Regional', emoji: '🗺️' },
+                  ].map(({ type, label, emoji }) => (
                     <Button
                       key={type}
                       variant="outline"
@@ -314,9 +327,10 @@ export default function SearchPage() {
                         const newFilters = { ...filters, type };
                         handleFiltersChange(newFilters);
                       }}
-                      className="h-auto py-4 flex-col"
+                      className="h-auto py-6 flex-col bg-white/80 backdrop-blur-sm border-primary-200 hover:border-accent-300 hover:bg-accent-50 transition-all duration-200 beer-card-glow"
                     >
-                      <span className="text-sm font-medium">{label}</span>
+                      <span className="text-2xl mb-2">{emoji}</span>
+                      <span className="text-sm font-semibold text-gray-700">{label}</span>
                     </Button>
                   ))}
                 </div>
@@ -335,5 +349,20 @@ export default function SearchPage() {
         breweryCount={breweries.length}
       />
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen beer-themed-bg beer-texture flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-600 mx-auto mb-4"></div>
+          <p className="text-accent-700 font-medium">Loading brewery search...</p>
+        </div>
+      </div>
+    }>
+      <SearchPageContent />
+    </Suspense>
   );
 }

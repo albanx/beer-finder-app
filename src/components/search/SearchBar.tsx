@@ -176,7 +176,7 @@ export function SearchBar({
           {showSuggestionsList && suggestions.length > 0 && (
             <div
               ref={suggestionsRef}
-              className="absolute top-full left-0 right-0 z-50 mt-1 bg-surface border border-border rounded-lg shadow-lg max-h-60 overflow-auto"
+              className="absolute top-full left-0 right-0 z-50 mt-2 bg-white border border-primary-200 rounded-xl shadow-xl max-h-60 overflow-auto backdrop-blur-sm"
               role="listbox"
               aria-label="Search suggestions"
             >
@@ -184,14 +184,16 @@ export function SearchBar({
                 <button
                   key={`suggestion-${index}`}
                   type="button"
-                  className="w-full px-4 py-3 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none first:rounded-t-lg last:rounded-b-lg border-b border-border last:border-b-0 transition-colors"
+                  className="w-full px-4 py-3 text-left hover:bg-primary-50 focus:bg-primary-50 focus:outline-none first:rounded-t-xl last:rounded-b-xl border-b border-primary-100 last:border-b-0 transition-all duration-200 group"
                   onClick={() => handleSuggestionClick(suggestion)}
                   role="option"
                   tabIndex={-1}
                 >
                   <div className="flex items-center gap-3">
-                    <SearchIcon />
-                    <span className="text-foreground">{suggestion}</span>
+                    <div className="text-primary-400 group-hover:text-primary-600 transition-colors">
+                      <SearchIcon />
+                    </div>
+                    <span className="text-gray-700 group-hover:text-primary-700 font-medium transition-colors">{suggestion}</span>
                   </div>
                 </button>
               ))}
@@ -202,12 +204,13 @@ export function SearchBar({
         {variant === 'primary' && (
           <Button
             type="submit"
+            variant="beer"
             size={size}
             loading={loading}
             disabled={!value.trim() || loading}
-            className="shrink-0"
+            className="shrink-0 px-8"
           >
-            {loading ? 'Searching...' : 'Search'}
+            {loading ? 'Searching...' : '🔍 Search'}
           </Button>
         )}
       </form>
@@ -327,11 +330,12 @@ export function SearchWithLocation({
         
         <Button
           type="submit"
+          variant="beer"
           loading={loading}
           disabled={(!searchValue.trim() && !locationValue.trim()) || loading}
-          className="shrink-0"
+          className="shrink-0 px-8"
         >
-          {loading ? 'Searching...' : 'Search'}
+          {loading ? 'Searching...' : '🔍 Search'}
         </Button>
       </form>
     </div>

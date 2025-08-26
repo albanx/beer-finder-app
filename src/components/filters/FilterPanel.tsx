@@ -140,7 +140,7 @@ export function FilterPanel({
               <FilterIcon />
               <h2 className="text-lg font-semibold text-foreground">Filters</h2>
               {hasActiveFilters && (
-                <span className="bg-primary-500 text-white text-xs px-2 py-1 rounded-full">
+                <span className="bg-gradient-to-r from-accent-500 to-accent-600 text-white text-xs px-2 py-1 rounded-full font-bold shadow-sm">
                   {localFilters.types.length + localFilters.locations.length}
                 </span>
               )}
@@ -179,10 +179,11 @@ export function FilterPanel({
               Clear All
             </Button>
             <Button
+              variant="beer"
               onClick={handleApply}
               className="flex-1"
             >
-              Apply Filters
+              🍺 Apply Filters
               {resultCount !== undefined && ` (${resultCount})`}
             </Button>
           </div>
@@ -204,7 +205,7 @@ export function FilterPanel({
             <FilterIcon />
             <h2 className="text-lg font-semibold text-foreground">Filters</h2>
             {hasActiveFilters && (
-              <span className="bg-primary-500 text-white text-xs px-2 py-1 rounded-full">
+              <span className="bg-gradient-to-r from-accent-500 to-accent-600 text-white text-xs px-2 py-1 rounded-full font-bold shadow-sm">
                 {localFilters.types.length + localFilters.locations.length}
               </span>
             )}
@@ -226,10 +227,11 @@ export function FilterPanel({
         {/* Actions */}
         <div className="space-y-3 pt-4 border-t border-border">
           <Button
+            variant="beer"
             onClick={handleApply}
             className="w-full"
           >
-            Apply Filters
+            🍺 Apply Filters
             {resultCount !== undefined && ` (${resultCount})`}
           </Button>
           <Button
@@ -330,12 +332,12 @@ function FilterContent({
             {localFilters.locations.map((location, index) => (
               <div
                 key={`location-${index}`}
-                className="flex items-center gap-1 bg-primary-100 text-primary-700 px-2 py-1 rounded-md text-sm"
+                className="flex items-center gap-1 bg-gradient-to-r from-accent-100 to-accent-200 text-accent-800 px-3 py-1.5 rounded-full text-sm font-medium shadow-sm"
               >
                 <span>{location}</span>
                 <button
                   onClick={() => handleLocationRemove(location)}
-                  className="ml-1 hover:bg-primary-200 rounded p-0.5"
+                  className="ml-1 hover:bg-accent-300 rounded-full p-1 transition-colors"
                   aria-label={`Remove ${location}`}
                 >
                   <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
@@ -423,7 +425,7 @@ export function FilterToggle({ onClick, hasActiveFilters, activeCount }: FilterT
       <FilterIcon />
       <span className="text-sm font-medium">Filters</span>
       {hasActiveFilters && (
-        <span className="bg-primary-500 text-white text-xs px-2 py-1 rounded-full">
+        <span className="bg-gradient-to-r from-accent-500 to-accent-600 text-white text-xs px-2 py-1 rounded-full font-bold shadow-sm">
           {activeCount}
         </span>
       )}

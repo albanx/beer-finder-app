@@ -68,21 +68,11 @@ export interface BreweryFilters {
   sort?: SortOption;
 }
 
-// Random Beer Integration (mock data structure)
-export interface RandomBeer {
-  id: string;
-  name: string;
-  style: string;
-  abv: number;
-  ibu?: number;
-  description: string;
-  image_url?: string;
-}
+// Keep the PunkBeer import for potential future use with dedicated random beer page
+import type { PunkBeer } from '../services/api/punkApi';
 
-// Extended brewery interface with random beer
-export interface BreweryWithRandomBeer extends Brewery {
-  randomBeer?: RandomBeer;
-}
+// Type alias for PunkBeer - preserved for dedicated random beer functionality
+export type BeerData = PunkBeer;
 
 // API Response wrapper
 export interface ApiResponse<T> {

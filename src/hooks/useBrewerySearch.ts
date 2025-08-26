@@ -1,18 +1,17 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { breweryApi, randomBeerGenerator } from '@/services/api/breweryApi';
+import { breweryApi, beerApiService } from '@/services/api/breweryApi';
 import {
   Brewery,
   BrewerySearchParams,
   FilterState,
-  BreweryWithRandomBeer,
   ApiResponse,
   BreweryFilters
 } from '@/types/brewery';
 
 interface UseBrewerySearchReturn {
-  breweries: BreweryWithRandomBeer[];
+  breweries: Brewery[];
   loading: boolean;
   error: string | null;
   totalResults: number;
@@ -25,7 +24,7 @@ interface UseBrewerySearchReturn {
 }
 
 export function useBrewerySearch(): UseBrewerySearchReturn {
-  const [breweries, setBreweries] = useState<BreweryWithRandomBeer[]>([]);
+  const [breweries, setBreweries] = useState<Brewery[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [totalResults, setTotalResults] = useState(0);
@@ -33,13 +32,6 @@ export function useBrewerySearch(): UseBrewerySearchReturn {
   const [hasMore, setHasMore] = useState(false);
   const [lastSearchParams, setLastSearchParams] = useState<BrewerySearchParams | null>(null);
 
-  // Add random beer to each brewery
-  const enhanceBreweriesWithRandomBeer = useCallback((breweries: Brewery[]): BreweryWithRandomBeer[] => {
-    return breweries.map(brewery => ({
-      ...brewery,
-      randomBeer: randomBeerGenerator.generateRandomBeer(),
-    }));
-  }, []);
 
   // Convert search parameters to API format
   const convertToApiParams = useCallback((query?: string, location?: string, filters?: BreweryFilters): BrewerySearchParams => {
@@ -92,9 +84,8 @@ export function useBrewerySearch(): UseBrewerySearchReturn {
       setLastSearchParams(params);
 
       const response = await breweryApi.searchBreweries(params);
-      const enhancedBreweries = enhanceBreweriesWithRandomBeer(response.breweries);
       
-      setBreweries(enhancedBreweries);
+      setBreweries(response.breweries);
       setTotalResults(response.total);
       setHasMore(response.breweries.length >= (params.per_page || 20));
     } catch (err) {
@@ -106,7 +97,7 @@ export function useBrewerySearch(): UseBrewerySearchReturn {
     } finally {
       setLoading(false);
     }
-  }, [convertToApiParams, enhanceBreweriesWithRandomBeer]);
+  }, [convertToApiParams]);
 
   const loadMoreBreweries = useCallback(async () => {
     if (!lastSearchParams || loading || !hasMore) return;
@@ -119,9 +110,8 @@ export function useBrewerySearch(): UseBrewerySearchReturn {
       const params = { ...lastSearchParams, page: nextPage };
       
       const response = await breweryApi.searchBreweries(params);
-      const enhancedBreweries = enhanceBreweriesWithRandomBeer(response.breweries);
       
-      setBreweries(prev => [...prev, ...enhancedBreweries]);
+      setBreweries(prev => [...prev, ...response.breweries]);
       setCurrentPage(nextPage);
       setHasMore(response.breweries.length >= (params.per_page || 20));
     } catch (err) {
@@ -130,7 +120,7 @@ export function useBrewerySearch(): UseBrewerySearchReturn {
     } finally {
       setLoading(false);
     }
-  }, [lastSearchParams, loading, hasMore, currentPage, enhanceBreweriesWithRandomBeer]);
+  }, [lastSearchParams, loading, hasMore, currentPage]);
 
   const clearSearch = useCallback(() => {
     setBreweries([]);
@@ -215,14 +205,14 @@ export function useBreweryFilters(): UseBreweryFiltersReturn {
 
 // Hook for random brewery discovery
 interface UseRandomBreweryReturn {
-  brewery: BreweryWithRandomBeer | null;
+  brewery: Brewery | null;
   loading: boolean;
   error: string | null;
   getRandomBrewery: () => Promise<void>;
 }
 
 export function useRandomBrewery(): UseRandomBreweryReturn {
-  const [brewery, setBrewery] = useState<BreweryWithRandomBeer | null>(null);
+  const [brewery, setBrewery] = useState<Brewery | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -232,12 +222,7 @@ export function useRandomBrewery(): UseRandomBreweryReturn {
       setError(null);
 
       const [randomBrewery] = await breweryApi.getRandomBreweries(1);
-      const enhancedBrewery: BreweryWithRandomBeer = {
-        ...randomBrewery,
-        randomBeer: randomBeerGenerator.generateRandomBeer(),
-      };
-      
-      setBrewery(enhancedBrewery);
+      setBrewery(randomBrewery);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to get random brewery';
       setError(errorMessage);
@@ -294,6 +279,51 @@ export function useSearchSuggestions(): UseSearchSuggestionsReturn {
     loading,
     getSuggestions,
     clearSuggestions,
+  };
+}
+
+// Hook for random beer discovery using Punk API
+interface UseRandomBeerReturn {
+  beer: import('@/types/brewery').BeerData | null;
+  loading: boolean;
+  error: string | null;
+  getRandomBeer: () => Promise<void>;
+  refreshBeer: () => Promise<void>;
+}
+
+export function useRandomBeer(): UseRandomBeerReturn {
+  const [beer, setBeer] = useState<import('@/types/brewery').BeerData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const getRandomBeer = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const randomBeer = await beerApiService.getRandomBeer();
+      setBeer(randomBeer);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to get random beer';
+      setError(errorMessage);
+      setBeer(null);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const refreshBeer = useCallback(async () => {
+    // Clear cache to ensure fresh data
+    beerApiService.clearCache();
+    await getRandomBeer();
+  }, [getRandomBeer]);
+
+  return {
+    beer,
+    loading,
+    error,
+    getRandomBeer,
+    refreshBeer,
   };
 }
 

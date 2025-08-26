@@ -1,57 +1,57 @@
 @import "tailwindcss";
 
-/* Design System Variables */
+/* Design System Variables - Accessibility Improved */
 :root {
-  /* Color System */
+  /* Primary Color System - Standard blue with excellent contrast */
   --color-primary-50: #eff6ff;
   --color-primary-100: #dbeafe;
   --color-primary-200: #bfdbfe;
   --color-primary-300: #93c5fd;
   --color-primary-400: #60a5fa;
-  --color-primary-500: #2563eb;
-  --color-primary-600: #1d4ed8;
-  --color-primary-700: #1e40af;
-  --color-primary-800: #1e3a8a;
-  --color-primary-900: #172554;
+  --color-primary-500: #3b82f6;  /* Standard blue-500 */
+  --color-primary-600: #2563eb;  /* Primary action color - excellent contrast */
+  --color-primary-700: #1d4ed8;  /* Darker for active states */
+  --color-primary-800: #1e40af;  /* Even darker for pressed states */
+  --color-primary-900: #1e3a8a;
   
-  /* Amber Accent System */
-  --color-accent-50: #fffbeb;
-  --color-accent-100: #fef3c7;
-  --color-accent-200: #fde68a;
-  --color-accent-300: #fcd34d;
-  --color-accent-400: #fbbf24;
-  --color-accent-500: #f59e0b;
-  --color-accent-600: #d97706;
-  --color-accent-700: #b45309;
-  --color-accent-800: #92400e;
-  --color-accent-900: #78350f;
+  /* Accessible Orange System - Standard orange with excellent contrast */
+  --color-accent-50: #fff7ed;
+  --color-accent-100: #ffedd5;
+  --color-accent-200: #fed7aa;
+  --color-accent-300: #fdba74;
+  --color-accent-400: #fb923c;
+  --color-accent-500: #f97316;  /* Standard orange-500 */
+  --color-accent-600: #ea580c;  /* Excellent contrast for buttons */
+  --color-accent-700: #c2410c;  /* Darker for hover states */
+  --color-accent-800: #9a3412;  /* Even darker for active states */
+  --color-accent-900: #7c2d12;
   
-  /* Semantic Colors */
-  --color-success: #22c55e;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
-  --color-info: #3b82f6;
+  /* Semantic Colors - WCAG AA compliant */
+  --color-success: #16a34a;     /* Darker green for better contrast */
+  --color-warning: #ca8a04;     /* Darker yellow-brown for readability */
+  --color-error: #dc2626;       /* Standard accessible red */
+  --color-info: #1d4ed8;        /* Using primary blue for consistency */
   
-  /* Neutral System */
+  /* Neutral System - Enhanced for accessibility */
   --color-gray-50: #f9fafb;
   --color-gray-100: #f3f4f6;
   --color-gray-200: #e5e7eb;
   --color-gray-300: #d1d5db;
   --color-gray-400: #9ca3af;
   --color-gray-500: #6b7280;
-  --color-gray-600: #4b5563;
-  --color-gray-700: #374151;
-  --color-gray-800: #1f2937;
-  --color-gray-900: #111827;
-  --color-gray-950: #030712;
+  --color-gray-600: #4b5563;  /* Minimum for text on light backgrounds */
+  --color-gray-700: #374151;  /* Good contrast for secondary text */
+  --color-gray-800: #1f2937;  /* High contrast for main text */
+  --color-gray-900: #0f172a;  /* Maximum contrast - deeper than before */
+  --color-gray-950: #020617;  /* Deep black for ultimate contrast */
   
-  /* Background and Surface Colors */
+  /* Background and Surface Colors - Enhanced contrast */
   --color-background: #ffffff;
   --color-surface: #ffffff;
-  --color-surface-elevated: #f9fafb;
-  --color-foreground: #111827;
-  --color-muted: #6b7280;
-  --color-border: #e5e7eb;
+  --color-surface-elevated: #f8fafc;  /* Slightly more contrast */
+  --color-foreground: #0f172a;         /* Darker for better contrast */
+  --color-muted: #64748b;              /* Better contrast than before */
+  --color-border: #e2e8f0;             /* Subtle but visible */
   
   /* Typography Scale */
   --font-family-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
@@ -90,15 +90,15 @@
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
-/* Dark Mode Variables */
+/* Dark Mode Variables - Enhanced for accessibility */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: #0a0a0a;
-    --color-surface: #111827;
-    --color-surface-elevated: #1f2937;
-    --color-foreground: #f9fafb;
-    --color-muted: #9ca3af;
-    --color-border: #374151;
+    --color-background: #020617;        /* Deeper dark background */
+    --color-surface: #0f172a;           /* Better contrast surface */
+    --color-surface-elevated: #1e293b;   /* Clear elevation difference */
+    --color-foreground: #f1f5f9;        /* High contrast light text */
+    --color-muted: #94a3b8;             /* Better contrast for muted text */
+    --color-border: #334155;            /* Visible but subtle borders */
   }
 }
 
@@ -106,12 +106,45 @@
 
 /* Base Styles */
 body {
-  background: var(--color-background);
+  background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
   color: var(--color-foreground);
   font-family: var(--font-family-sans);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* Beer-themed background patterns */
+.beer-themed-bg {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 25%, #fffbeb 75%, #fef3c7 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Subtle texture overlay */
+.beer-texture {
+  position: relative;
+}
+
+.beer-texture::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(245, 158, 11, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(37, 99, 235, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(245, 158, 11, 0.02) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 /* Custom Utility Classes */
@@ -290,4 +323,110 @@ body {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* Enhanced Beer-themed visual elements */
+.beer-card-glow {
+  box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.1), 0 2px 4px -1px rgba(37, 99, 235, 0.1);
+  transition: all 0.3s ease;
+}
+
+.beer-card-glow:hover {
+  box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.2), 0 4px 6px -2px rgba(37, 99, 235, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Beer foam effect */
+.beer-foam {
+  position: relative;
+  overflow: hidden;
+}
+
+.beer-foam::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.3), transparent);
+  animation: foam 3s ease-in-out infinite;
+}
+
+@keyframes foam {
+  0%, 100% { opacity: 0; transform: translateX(-100%); }
+  50% { opacity: 1; transform: translateX(100%); }
+}
+
+/* Beer bottle gradient */
+.beer-bottle-gradient {
+  background: linear-gradient(145deg,
+    rgba(245, 158, 11, 0.1) 0%,
+    rgba(37, 99, 235, 0.1) 25%,
+    rgba(245, 158, 11, 0.05) 50%,
+    rgba(37, 99, 235, 0.05) 75%,
+    rgba(245, 158, 11, 0.1) 100%);
+}
+
+/* Enhanced focus states with beer theme */
+.beer-focus:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.3), 0 0 0 6px rgba(37, 99, 235, 0.1);
+  border-color: var(--color-accent-500);
+}
+
+/* Brewery type badges */
+.brewery-badge {
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600));
+  color: white;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}
+
+.brewery-badge-accent {
+  background: linear-gradient(135deg, var(--color-accent-500), var(--color-accent-600));
+  box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
+}
+
+/* Page headers with beer theme */
+.beer-page-header {
+  background: linear-gradient(135deg,
+    var(--color-primary-50) 0%,
+    var(--color-accent-50) 50%,
+    var(--color-primary-50) 100%);
+  border-bottom: 1px solid var(--color-primary-200);
+}
+
+/* Interactive card enhancements */
+.card-interactive {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-interactive::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.card-interactive:hover::before {
+  left: 100%;
+}
+
+.card-interactive:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+              0 10px 10px -5px rgba(0, 0, 0, 0.04),
+              0 0 20px rgba(245, 158, 11, 0.1);
 }

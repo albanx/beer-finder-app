@@ -4,15 +4,15 @@ import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/utils/cn';
-import { BreweryWithRandomBeer } from '@/types/brewery';
+import { Brewery } from '@/types/brewery';
 import { apiUtils } from '@/services/api/breweryApi';
 
 interface BreweryCardProps {
-  brewery: BreweryWithRandomBeer;
+  brewery: Brewery;
   variant?: 'compact' | 'standard' | 'featured';
   onFavoriteToggle?: (breweryId: string) => void;
   onViewDetails?: (breweryId: string) => void;
-  onGetDirections?: (brewery: BreweryWithRandomBeer) => void;
+  onGetDirections?: (brewery: Brewery) => void;
   isFavorited?: boolean;
   className?: string;
 }
@@ -63,7 +63,6 @@ export function BreweryCard({
   className,
 }: BreweryCardProps) {
   const [imageError, setImageError] = useState(false);
-  const [beerImageError, setBeerImageError] = useState(false);
 
   const formattedType = apiUtils.formatBreweryType(brewery.brewery_type);
   const formattedAddress = apiUtils.formatBreweryAddress(brewery);
@@ -124,31 +123,6 @@ export function BreweryCard({
                 {formattedType} • {brewery.city}, {brewery.state}
               </p>
 
-              {/* Random Beer */}
-              {brewery.randomBeer && (
-                <div className="mt-2 bg-gray-50 rounded-lg p-2 flex items-center gap-2">
-                  <div className="w-8 h-8 rounded bg-accent-100 flex-shrink-0 flex items-center justify-center">
-                    {!beerImageError && brewery.randomBeer.image_url ? (
-                      <img
-                        src={brewery.randomBeer.image_url}
-                        alt={brewery.randomBeer.name}
-                        className="w-full h-full object-cover rounded"
-                        onError={() => setBeerImageError(true)}
-                      />
-                    ) : (
-                      <BeerIcon />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium text-foreground truncate">
-                      {brewery.randomBeer.name}
-                    </p>
-                    <p className="text-xs text-muted">
-                      {brewery.randomBeer.abv}% ABV
-                    </p>
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Favorite Button */}
@@ -179,6 +153,7 @@ export function BreweryCard({
             </Button>
             <Button
               size="sm"
+              variant="beer"
               onClick={handleViewDetailsClick}
               icon={<ViewIcon />}
               className="flex-1"
@@ -264,45 +239,6 @@ export function BreweryCard({
           )}
         </div>
 
-        {/* Random Beer Spotlight */}
-        {brewery.randomBeer && (
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-lg bg-accent-100 flex-shrink-0 overflow-hidden">
-                {!beerImageError && brewery.randomBeer.image_url ? (
-                  <img
-                    src={brewery.randomBeer.image_url}
-                    alt={brewery.randomBeer.name}
-                    className="w-full h-full object-cover"
-                    onError={() => setBeerImageError(true)}
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-accent-600">
-                    <BeerIcon />
-                  </div>
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground">
-                  Random Beer: {brewery.randomBeer.name}
-                </p>
-                <div className="flex items-center gap-3 mt-1">
-                  <span className="text-xs text-muted">
-                    {brewery.randomBeer.style}
-                  </span>
-                  <span className="text-xs font-medium text-accent-600">
-                    {brewery.randomBeer.abv}% ABV
-                  </span>
-                  {brewery.randomBeer.ibu && (
-                    <span className="text-xs text-muted">
-                      {brewery.randomBeer.ibu} IBU
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Actions */}
         <div className="flex items-center gap-3">
@@ -317,6 +253,7 @@ export function BreweryCard({
           </Button>
           <Button
             size="sm"
+            variant="beer"
             onClick={handleViewDetailsClick}
             icon={<ViewIcon />}
             className="flex-1"

@@ -1,4 +1,4 @@
-import { Brewery, BrewerySearchParams, BrewerySearchResponse, RandomBeer } from '@/types/brewery';
+import { Brewery, BrewerySearchParams, BrewerySearchResponse } from '@/types/brewery';
 
 const BASE_URL = 'https://api.openbrewerydb.org/v1/breweries';
 
@@ -155,41 +155,66 @@ class BreweryApiClient {
 // Create singleton instance
 export const breweryApi = new BreweryApiClient();
 
-// Random Beer Generator (Mock implementation)
-// This simulates the random beer feature since Open Brewery DB doesn't provide beer data
-export class RandomBeerGenerator {
-  private beerStyles = [
-    'IPA', 'Stout', 'Lager', 'Pilsner', 'Wheat Beer', 'Porter', 'Amber Ale',
-    'Pale Ale', 'Belgian Ale', 'Sour Beer', 'Saison', 'Brown Ale', 'ESB',
-    'Barleywine', 'Imperial Stout', 'Double IPA', 'Tripel', 'Quadrupel'
-  ];
+// Real Beer API integration using Punk API
+import { punkApi, type PunkBeer } from './punkApi';
 
-  private beerNames = [
-    'Hop Heaven', 'Dark Knight', 'Golden Glory', 'Wheat Wonder', 'Bitter Truth',
-    'Smooth Operator', 'Liquid Gold', 'Black Magic', 'Citrus Burst', 'Caramel Dream',
-    'Roasted Delight', 'Tropical Storm', 'Vanilla Sky', 'Coffee Kick', 'Berry Blast',
-    'Honey Crisp', 'Spice Route', 'Ocean Breeze', 'Mountain High', 'Valley Low'
-  ];
-
-  generateRandomBeer(): RandomBeer {
-    const style = this.beerStyles[Math.floor(Math.random() * this.beerStyles.length)];
-    const name = this.beerNames[Math.floor(Math.random() * this.beerNames.length)];
-    const abv = Math.round((Math.random() * 8 + 3) * 10) / 10; // 3.0 - 11.0 ABV
-    const ibu = Math.floor(Math.random() * 80 + 10); // 10-90 IBU
-
+// Beer service that integrates with Punk API
+export class BeerApiService {
+  private getFallbackBeer(): PunkBeer {
+    // Fallback beer data in case API is unavailable
     return {
-      id: `beer_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      name: `${name} ${style}`,
-      style,
-      abv,
-      ibu,
-      description: `A delicious ${style.toLowerCase()} with ${abv}% alcohol content and ${ibu} IBU.`,
-      image_url: '', // Remove placeholder images to avoid network errors
+      id: '1',
+      name: 'Buzz',
+      tagline: 'A Real Bitter Experience.',
+      description: 'A light, crisp and bitter IPA brewed with English and American hops.',
+      abv: 4.5,
+      ibu: 60,
+      ebc: 20,
+      image_url: 'https://images.punkapi.com/v2/keg.png',
+      first_brewed: '09/2007',
+      food_pairing: ['Spicy chicken tikka masala', 'Grilled chicken quesadilla', 'Caramel toffee cake'],
+      brewers_tips: 'The earthy and floral aromas from the hops can be overpowering. Drop the hop addition back to 20g if your palate is sensitive to bitterness.',
+      style: 'IPA'
     };
+  }
+
+  async getRandomBeer(): Promise<PunkBeer> {
+    try {
+      const punkBeer = await punkApi.getRandomBeer();
+      return punkBeer;
+    } catch (error) {
+      console.error('Failed to fetch random beer from Punk API:', error);
+      // Return fallback beer data
+      return this.getFallbackBeer();
+    }
+  }
+
+  async getBeerById(id: string): Promise<PunkBeer | null> {
+    try {
+      const punkBeer = await punkApi.getBeerById(id);
+      if (!punkBeer) return null;
+      return punkBeer;
+    } catch (error) {
+      console.error(`Failed to fetch beer ${id} from Punk API:`, error);
+      return null;
+    }
+  }
+
+
+  // Clear cache for fresh data
+  clearCache(): void {
+    punkApi.clearCache();
+  }
+
+  // Get cache stats for debugging
+  getCacheStats() {
+    return punkApi.getCacheStats();
   }
 }
 
-export const randomBeerGenerator = new RandomBeerGenerator();
+export const beerApiService = new BeerApiService();
+
+// Deprecated exports removed - use beerApiService instead
 
 // Utility functions for API integration
 export const apiUtils = {
